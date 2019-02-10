@@ -84,8 +84,11 @@ export default {
           })
         };
         const doc = await db.localuser.insert(user);
+        const doc2 = await db.users.insert(user);
+        console.dir(doc2);
         this.$router.push({path: '/'});
       } catch (e) {
+        console.trace(e);
         M.toast({
           html: e
         });

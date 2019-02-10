@@ -1,5 +1,6 @@
 import 'babel-polyfill'; // only needed when you dont have polyfills
 import RxDB from 'rxdb';
+import * as geolib from 'geolib';
 
 RxDB.plugin(require('pouchdb-adapter-idb'));
 RxDB.plugin(require('pouchdb-adapter-http')); //enable syncing over http
@@ -7,7 +8,16 @@ RxDB.plugin(require('pouchdb-adapter-http')); //enable syncing over http
 const collections = [{
     name: 'localuser',
     schema: require('./UserSchema.js').default,
-    methods: {},
+    methods: {}
+  },
+  {
+    name: 'users',
+    schema: require('./UserSchema.js').default,
+    methods: {
+      getDistance: function(localuser) {
+        return geolib.getDistance(localuser.position, this.position);
+      }
+    },
     sync: true
   },
   {
@@ -19,11 +29,8 @@ const collections = [{
 ];
 
 
-/*
 const syncURL = 'http://' + window.location.hostname + ':10101/';
-console.log('host: ' + syncURL);
 // const syncURL = host;
- */
 
 /* because vue-dev-server only reloads the changed code and not the whole page,
  * we have to ensure that the same database only exists once
@@ -63,13 +70,32 @@ const _create = async function() {
   console.log('DatabaseService: create collections');
   await Promise.all(collections.map(colData => db.collection(colData)));
 
-  // sync
+
+  // hook
+  db.localuser.postInsert(async(plainData) => {
+    console.log('upsert hook');
+    const all = await db.users.find().exec();
+    console.dir(all);
+    // const doc = await db.users.upsert(plainData);
+    // console.dir(doc);
+    return;
+  }, true);
+
   /*
+  db.localuser.postSave(plainData => {
+  console.log('upsert hook');
+  return db.users.upsert(plainData);
+}, true);
+
+   */
+
+  // sync
+
   console.log('DatabaseService: sync');
   db.users.sync({
     remote: syncURL + 'users/'
   });
-   */
+
 
   return db;
 };

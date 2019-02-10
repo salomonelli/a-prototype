@@ -5,13 +5,16 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
+    "server": "pouchdb-server --host 0.0.0.0 -p 10101 -m -d /tmp/pouchdb-server/ -n true",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "babel-polyfill": "^6.26.0",
+    "geolib": "^2.0.24",
     "materialize-css": "^1.0.0-rc.2",
     "pouchdb-adapter-http": "^7.0.0",
     "pouchdb-adapter-idb": "^7.0.0",
+    "pouchdb-server": "^4.1.0",
     "random-material-color": "^1.0.3",
     "rxdb": "^8.0.5",
     "rxjs": "^6.4.0",
