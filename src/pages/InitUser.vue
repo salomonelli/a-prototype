@@ -74,7 +74,7 @@ export default {
         if (this.shareLocation)
           position = await this.getLocation();
         // store to db
-        const db = Database.get();
+        const db = await Database.get();
         const user = {
           pseudonym: this.pseudonym,
           locationEnabled: this.shareLocation,
@@ -94,7 +94,7 @@ export default {
   },
   async mounted() {
     // check if user exists
-    const db = Database.get();
+    const db = await Database.get();
     const user = await db.localuser.findOne().exec();
     if (user && user.pseudonym != '')
       this.$router.push({path: '/'});

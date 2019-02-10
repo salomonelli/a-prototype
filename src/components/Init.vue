@@ -1,11 +1,11 @@
 <template>
-<p>aaaaaaaaaa</p>
+<p>aaaa</p>
 
 </template>
 
 <script>
 export default {
-  name: 'Init',
+  name: 'init',
   props: {
     msg: String
   }
